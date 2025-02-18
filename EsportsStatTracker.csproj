@@ -58,11 +58,11 @@
     <Compile Include="MainScreen.Designer.cs">
       <DependentUpon>MainScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewSeasonPrompt.cs">
+    <Compile Include="NewEntryPrompt.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewSeasonPrompt.Designer.cs">
-      <DependentUpon>NewSeasonPrompt.cs</DependentUpon>
+    <Compile Include="NewEntryPrompt.Designer.cs">
+      <DependentUpon>NewEntryPrompt.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -78,8 +78,8 @@
     <EmbeddedResource Include="MainScreen.resx">
       <DependentUpon>MainScreen.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewSeasonPrompt.resx">
-      <DependentUpon>NewSeasonPrompt.cs</DependentUpon>
+    <EmbeddedResource Include="NewEntryPrompt.resx">
+      <DependentUpon>NewEntryPrompt.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
