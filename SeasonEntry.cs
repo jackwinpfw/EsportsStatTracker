@@ -10,11 +10,17 @@ using System.Windows.Forms;
 
 namespace EsportsStatTracker
 {
-    public partial class Form1 : Form
+    public partial class SeasonEntry : UserControl
     {
-        public Form1()
+        public SeasonEntry()
         {
             InitializeComponent();
+        }
+
+        public SeasonEntry(String name)
+        {
+            InitializeComponent();
+            SeasonTitle.Text = name;
         }
     }
 }
