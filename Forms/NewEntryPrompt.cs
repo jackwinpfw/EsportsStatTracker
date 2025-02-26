@@ -24,5 +24,15 @@ namespace EsportsStatTracker
             value = InputBox.Text;
             return res;
         }
+
+        public DialogResult ShowPrompt(string type, ref string value, string pretext)
+        {
+            PromptLabel.Text += type + ":";
+            InputBox.Text = pretext;
+            DialogResult res = ShowDialog();
+
+            value = InputBox.Text;
+            return res;
+        }
     }
 }

@@ -46,39 +46,54 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameInput.cs">
+    <Compile Include="Forms\EditSeason.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GameInput.Designer.cs">
+    <Compile Include="Forms\EditSeason.Designer.cs">
+      <DependentUpon>EditSeason.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GameInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GameInput.Designer.cs">
       <DependentUpon>GameInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainScreen.cs">
+    <Compile Include="Forms\MainScreen.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainScreen.Designer.cs">
+    <Compile Include="Forms\MainScreen.Designer.cs">
       <DependentUpon>MainScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewEntryPrompt.cs">
+    <Compile Include="Forms\NewEntryPrompt.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewEntryPrompt.Designer.cs">
+    <Compile Include="Forms\NewEntryPrompt.Designer.cs">
       <DependentUpon>NewEntryPrompt.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SeasonEntry.cs">
+    <Compile Include="UserControls\SeasonEntry.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SeasonEntry.Designer.cs">
+    <Compile Include="UserControls\SeasonEntry.Designer.cs">
       <DependentUpon>SeasonEntry.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="GameInput.resx">
+    <Compile Include="UserControls\TeamEntry.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\TeamEntry.Designer.cs">
+      <DependentUpon>TeamEntry.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Forms\EditSeason.resx">
+      <DependentUpon>EditSeason.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GameInput.resx">
       <DependentUpon>GameInput.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainScreen.resx">
+    <EmbeddedResource Include="Forms\MainScreen.resx">
       <DependentUpon>MainScreen.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewEntryPrompt.resx">
+    <EmbeddedResource Include="Forms\NewEntryPrompt.resx">
       <DependentUpon>NewEntryPrompt.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -89,9 +104,13 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="SeasonEntry.resx">
+    <EmbeddedResource Include="UserControls\SeasonEntry.resx">
       <DependentUpon>SeasonEntry.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\TeamEntry.resx">
+      <DependentUpon>TeamEntry.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -105,6 +124,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pencil.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

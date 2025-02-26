@@ -38,7 +38,7 @@
             // 
             this.PromptLabel.AutoSize = true;
             this.PromptLabel.Font = new System.Drawing.Font("Oswald Medium", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PromptLabel.Location = new System.Drawing.Point(9, 24);
+            this.PromptLabel.Location = new System.Drawing.Point(9, 10);
             this.PromptLabel.Margin = new System.Windows.Forms.Padding(0);
             this.PromptLabel.Name = "PromptLabel";
             this.PromptLabel.Size = new System.Drawing.Size(150, 27);
@@ -47,17 +47,21 @@
             // 
             // InputBox
             // 
-            this.InputBox.Location = new System.Drawing.Point(14, 54);
+            this.InputBox.Font = new System.Drawing.Font("Oswald", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.InputBox.Location = new System.Drawing.Point(14, 40);
             this.InputBox.Name = "InputBox";
-            this.InputBox.Size = new System.Drawing.Size(258, 22);
+            this.InputBox.Size = new System.Drawing.Size(258, 27);
             this.InputBox.TabIndex = 1;
             // 
             // buttonCancel
             // 
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(47, 97);
+            this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonCancel.Font = new System.Drawing.Font("Oswald Light", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonCancel.Location = new System.Drawing.Point(47, 83);
+            this.buttonCancel.Margin = new System.Windows.Forms.Padding(0);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancel.Size = new System.Drawing.Size(75, 38);
             this.buttonCancel.TabIndex = 2;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
@@ -65,9 +69,12 @@
             // buttonOK
             // 
             this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.buttonOK.Location = new System.Drawing.Point(161, 97);
+            this.buttonOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonOK.Font = new System.Drawing.Font("Oswald Light", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonOK.Location = new System.Drawing.Point(161, 83);
+            this.buttonOK.Margin = new System.Windows.Forms.Padding(0);
             this.buttonOK.Name = "buttonOK";
-            this.buttonOK.Size = new System.Drawing.Size(75, 23);
+            this.buttonOK.Size = new System.Drawing.Size(75, 38);
             this.buttonOK.TabIndex = 3;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
@@ -76,7 +83,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(284, 155);
+            this.ClientSize = new System.Drawing.Size(284, 135);
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.InputBox);

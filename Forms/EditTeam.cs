@@ -8,19 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EsportsStatTracker
+namespace EsportsStatTracker.Forms
 {
-    public partial class SeasonEntry : UserControl
+    public partial class EditTeam : Form
     {
-        public SeasonEntry()
+        public EditTeam()
         {
             InitializeComponent();
-        }
-
-        public SeasonEntry(String name)
-        {
-            InitializeComponent();
-            SeasonTitle.Text = name;
         }
     }
 }

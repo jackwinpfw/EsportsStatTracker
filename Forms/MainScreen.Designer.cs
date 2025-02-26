@@ -33,7 +33,9 @@
             this.HeaderPanel = new System.Windows.Forms.Panel();
             this.NewSeasonButton = new System.Windows.Forms.Button();
             this.TitleLabel = new System.Windows.Forms.Label();
+            this.seasonEntry1 = new EsportsStatTracker.SeasonEntry();
             this.TablePanel.SuspendLayout();
+            this.FlowPanel.SuspendLayout();
             this.HeaderPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,35 +54,39 @@
             this.TablePanel.RowCount = 2;
             this.TablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.TablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.TablePanel.Size = new System.Drawing.Size(913, 600);
+            this.TablePanel.Size = new System.Drawing.Size(738, 565);
             this.TablePanel.TabIndex = 1;
             // 
             // FlowPanel
             // 
+            this.FlowPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.FlowPanel.AutoScroll = true;
             this.FlowPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.FlowPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.FlowPanel.Controls.Add(this.seasonEntry1);
             this.FlowPanel.Location = new System.Drawing.Point(3, 103);
             this.FlowPanel.Name = "FlowPanel";
-            this.FlowPanel.Size = new System.Drawing.Size(907, 494);
+            this.FlowPanel.Size = new System.Drawing.Size(732, 494);
             this.FlowPanel.TabIndex = 2;
             // 
             // HeaderPanel
             // 
+            this.HeaderPanel.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.HeaderPanel.Controls.Add(this.NewSeasonButton);
             this.HeaderPanel.Controls.Add(this.TitleLabel);
             this.HeaderPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.HeaderPanel.Location = new System.Drawing.Point(0, 0);
             this.HeaderPanel.Margin = new System.Windows.Forms.Padding(0);
             this.HeaderPanel.Name = "HeaderPanel";
-            this.HeaderPanel.Size = new System.Drawing.Size(913, 100);
+            this.HeaderPanel.Size = new System.Drawing.Size(738, 100);
             this.HeaderPanel.TabIndex = 3;
             // 
             // NewSeasonButton
             // 
             this.NewSeasonButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.NewSeasonButton.Font = new System.Drawing.Font("Oswald", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.NewSeasonButton.Location = new System.Drawing.Point(795, 25);
+            this.NewSeasonButton.Location = new System.Drawing.Point(625, 25);
             this.NewSeasonButton.Margin = new System.Windows.Forms.Padding(0);
             this.NewSeasonButton.Name = "NewSeasonButton";
             this.NewSeasonButton.Size = new System.Drawing.Size(100, 50);
@@ -91,22 +97,31 @@
             // 
             // TitleLabel
             // 
-            this.TitleLabel.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.TitleLabel.BackColor = System.Drawing.Color.Transparent;
             this.TitleLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.TitleLabel.Font = new System.Drawing.Font("Oswald Medium", 50F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TitleLabel.Location = new System.Drawing.Point(0, -15);
             this.TitleLabel.Margin = new System.Windows.Forms.Padding(0);
             this.TitleLabel.Name = "TitleLabel";
-            this.TitleLabel.Size = new System.Drawing.Size(910, 120);
+            this.TitleLabel.Size = new System.Drawing.Size(596, 120);
             this.TitleLabel.TabIndex = 1;
             this.TitleLabel.Text = "Esports Data Tracker";
             this.TitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // seasonEntry1
+            // 
+            this.seasonEntry1.AutoSize = true;
+            this.seasonEntry1.Location = new System.Drawing.Point(0, 0);
+            this.seasonEntry1.Margin = new System.Windows.Forms.Padding(0);
+            this.seasonEntry1.Name = "seasonEntry1";
+            this.seasonEntry1.Size = new System.Drawing.Size(0, 0);
+            this.seasonEntry1.TabIndex = 0;
             // 
             // MainScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(909, 596);
+            this.ClientSize = new System.Drawing.Size(734, 561);
             this.Controls.Add(this.TablePanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -114,6 +129,8 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.TablePanel.ResumeLayout(false);
+            this.FlowPanel.ResumeLayout(false);
+            this.FlowPanel.PerformLayout();
             this.HeaderPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -125,6 +142,7 @@
         private System.Windows.Forms.FlowLayoutPanel FlowPanel;
         private System.Windows.Forms.Panel HeaderPanel;
         private System.Windows.Forms.Button NewSeasonButton;
+        private SeasonEntry seasonEntry1;
     }
 }
 
