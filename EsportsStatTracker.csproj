@@ -46,11 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\EditSeason.cs">
+    <Compile Include="Forms\EditTeam.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\EditSeason.Designer.cs">
-      <DependentUpon>EditSeason.cs</DependentUpon>
+    <Compile Include="Forms\EditTeam.Designer.cs">
+      <DependentUpon>EditTeam.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\GameInput.cs">
       <SubType>Form</SubType>
@@ -84,8 +84,8 @@
     <Compile Include="UserControls\TeamEntry.Designer.cs">
       <DependentUpon>TeamEntry.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Forms\EditSeason.resx">
-      <DependentUpon>EditSeason.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\EditTeam.resx">
+      <DependentUpon>EditTeam.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GameInput.resx">
       <DependentUpon>GameInput.cs</DependentUpon>
