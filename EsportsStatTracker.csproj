@@ -46,11 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\EditTeam.cs">
+    <Compile Include="Forms\DeletePrompt.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\EditTeam.Designer.cs">
-      <DependentUpon>EditTeam.cs</DependentUpon>
+    <Compile Include="Forms\DeletePrompt.Designer.cs">
+      <DependentUpon>DeletePrompt.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\GameInput.cs">
       <SubType>Form</SubType>
@@ -84,8 +84,8 @@
     <Compile Include="UserControls\TeamEntry.Designer.cs">
       <DependentUpon>TeamEntry.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Forms\EditTeam.resx">
-      <DependentUpon>EditTeam.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\DeletePrompt.resx">
+      <DependentUpon>DeletePrompt.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GameInput.resx">
       <DependentUpon>GameInput.cs</DependentUpon>
@@ -125,12 +125,17 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\trash.png" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\plus.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\pencil.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\controller.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

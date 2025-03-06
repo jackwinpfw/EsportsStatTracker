@@ -59,5 +59,14 @@ namespace EsportsStatTracker
             Height = 200;
             Height += teamCount * 75;
         }
+
+        private void DeleteSeason(object sender, EventArgs e)
+        {
+            DeletePrompt dp = new DeletePrompt();
+            if (dp.ShowPrompt() == DialogResult.OK)
+            {
+                Parent.Controls.Remove(this);
+            }
+        }
     }
 }

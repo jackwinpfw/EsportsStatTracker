@@ -67,7 +67,7 @@
             this.FlowPanel.Controls.Add(this.seasonEntry1);
             this.FlowPanel.Location = new System.Drawing.Point(3, 103);
             this.FlowPanel.Name = "FlowPanel";
-            this.FlowPanel.Size = new System.Drawing.Size(732, 494);
+            this.FlowPanel.Size = new System.Drawing.Size(732, 462);
             this.FlowPanel.TabIndex = 2;
             // 
             // HeaderPanel
