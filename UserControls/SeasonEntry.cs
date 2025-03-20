@@ -48,10 +48,9 @@ namespace EsportsStatTracker
             NewTeamPrompt nepf = new NewTeamPrompt();
 
             string input = string.Empty;
-            Games game = Games.NA;
+            Game game = new Game();
             if (nepf.ShowPrompt(ref input, ref game) == DialogResult.OK)
             {
-                if (input == string.Empty) return;
                 TeamEntry teamEntry = new TeamEntry(input, game);
                 FlowPanel.Controls.Add(teamEntry);
                 teamCount++;
