@@ -19,13 +19,13 @@ namespace EsportsStatTracker
 
         private void NewSeason(object sender, EventArgs e)
         {
-            NewEntryPromptForm nepf = new NewEntryPromptForm();
+            NewSeasonPrompt nepf = new NewSeasonPrompt();
 
-            string input = string.Empty;
-            if (nepf.ShowPrompt("season", ref input) == DialogResult.OK)
+            bool isFall = true;
+            int year = DateTime.Now.Year;
+            if (nepf.ShowPrompt(ref isFall, ref year) == DialogResult.OK)
             {
-                if (input == string.Empty) return;
-                SeasonEntry seasonEntry = new SeasonEntry(input);
+                SeasonEntry seasonEntry = new SeasonEntry(isFall, year);
                 FlowPanel.Controls.Add(seasonEntry);
             }
         }

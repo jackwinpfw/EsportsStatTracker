@@ -1,4 +1,5 @@
-﻿using EsportsStatTracker.Forms;
+﻿using EsportsStatTracker.ClassesEnums;
+using EsportsStatTracker.Forms;
 using System;
 using System.Windows.Forms;
 
@@ -6,15 +7,17 @@ namespace EsportsStatTracker
 {
     public partial class TeamEntry : UserControl
     {
+        Games game = Games.NA;
         public TeamEntry()
         {
             InitializeComponent();
         }
 
-        public TeamEntry(string input)
+        public TeamEntry(string input, Games game)
         {
             InitializeComponent();
             GameTitle.Text = input;
+            this.game = game;
         }
 
         public string GetTitle()
@@ -38,10 +41,10 @@ namespace EsportsStatTracker
 
         private void EditTeam(object sender, EventArgs e)
         {
-            NewEntryPromptForm nepf = new NewEntryPromptForm();
+            NewTeamPrompt nepf = new NewTeamPrompt();
 
-            string input = string.Empty;
-            if (nepf.ShowPrompt("team", ref input, GameTitle.Text) == DialogResult.OK)
+            string input = GameTitle.Text;
+            if (nepf.ShowPrompt(ref input, ref game) == DialogResult.OK)
             {
                 if (input == string.Empty) return;
                 GameTitle.Text = input;

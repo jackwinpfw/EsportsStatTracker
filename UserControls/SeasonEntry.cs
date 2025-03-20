@@ -1,4 +1,5 @@
-﻿using EsportsStatTracker.Forms;
+﻿using EsportsStatTracker.ClassesEnums;
+using EsportsStatTracker.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,41 +14,45 @@ namespace EsportsStatTracker
 {
     public partial class SeasonEntry : UserControl
     {
+        bool isFall = true;
+        int year;
         int teamCount = 0;
         public SeasonEntry()
         {
             InitializeComponent();
             UpdateSize();
+            UpdateName();
         }
 
-        public SeasonEntry(String name)
+        public SeasonEntry(bool isFall, int year)
         {
             InitializeComponent();
-            SeasonTitle.Text = name;
+            this.isFall = isFall;
+            this.year = year;
             UpdateSize();
+            UpdateName();
         }
 
         private void EditSeasonClick(object sender, EventArgs e)
         {
-            NewEntryPromptForm nepf = new NewEntryPromptForm();
+            NewSeasonPrompt nepf = new NewSeasonPrompt();
 
-            string input = string.Empty;
-            if (nepf.ShowPrompt("season", ref input, SeasonTitle.Text) == DialogResult.OK)
+            if (nepf.ShowPrompt(ref isFall, ref year) == DialogResult.OK)
             {
-                if (input == string.Empty) return;
-                SeasonTitle.Text = input;
+                UpdateName();
             }
         }
 
         private void NewTeam(object sender, EventArgs e)
         {
-            NewEntryPromptForm nepf = new NewEntryPromptForm();
+            NewTeamPrompt nepf = new NewTeamPrompt();
 
             string input = string.Empty;
-            if (nepf.ShowPrompt("team", ref input) == DialogResult.OK)
+            Games game = Games.NA;
+            if (nepf.ShowPrompt(ref input, ref game) == DialogResult.OK)
             {
                 if (input == string.Empty) return;
-                TeamEntry teamEntry = new TeamEntry(input);
+                TeamEntry teamEntry = new TeamEntry(input, game);
                 FlowPanel.Controls.Add(teamEntry);
                 teamCount++;
                 UpdateSize();
@@ -56,8 +61,7 @@ namespace EsportsStatTracker
 
         private void UpdateSize()
         {
-            Height = 200;
-            Height += teamCount * 75;
+            Height = 200 + (teamCount * 75);
         }
 
         private void DeleteSeason(object sender, EventArgs e)
@@ -67,6 +71,16 @@ namespace EsportsStatTracker
             {
                 Parent.Controls.Remove(this);
             }
+        }
+
+        private void UpdateName()
+        {
+            string name = string.Empty;
+            if (isFall) name += "Fall ";
+            else name += "Spring ";
+            name += year.ToString();
+
+            SeasonTitle.Text = name;
         }
     }
 }
