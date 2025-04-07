@@ -20,7 +20,8 @@ namespace EsportsStatTracker
         public DialogResult ShowPrompt(ref string name, ref Game game)
         {
             InputBox.Text = name;
-            comboBox1.SelectedIndex = (int)game.GetTType();
+            comboBox1.SelectedIndex = (int)game.GetTType() - 1;
+            if (comboBox1.SelectedIndex < 0) comboBox1.SelectedIndex = 0;
 
             DialogResult res = ShowDialog();
 

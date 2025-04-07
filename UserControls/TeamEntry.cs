@@ -18,19 +18,20 @@ namespace EsportsStatTracker
         public TeamEntry(string input, Game game)
         {
             InitializeComponent();
-            this.game = game;
+            this.game.SetTType(game.GetTType());
             teamName = input;
             SetTitle();
         }
 
-        public string GetTitle()
+        public string GetTeamName()
         {
-            return GameTitle.Text;
+            return teamName;
         }
 
         public void SetTitle()
         {
-            string title = game.GetStringType() + " - " + teamName;
+            string title = game.GetStringType();
+            if (teamName != string.Empty) title += " - " + teamName;
             GameTitle.Text = title;
         }
 
@@ -49,7 +50,7 @@ namespace EsportsStatTracker
 
             if (nepf.ShowPrompt(ref teamName, ref game) == DialogResult.OK)
             {
-                GameTitle.Text = teamName;
+                SetTitle();
             }
         }
     }
