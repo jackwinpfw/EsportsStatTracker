@@ -1,4 +1,4 @@
-﻿using EsportsStatTracker.ClassesEnums;
+﻿using EsportsStatTracker.Classes;
 using EsportsStatTracker.Forms;
 using System;
 using System.Collections.Generic;
@@ -52,6 +52,22 @@ namespace EsportsStatTracker
                 }
             }
             return exists;
+        }
+
+        public void RemoveTeam(TeamEntry te)
+        {
+            for (int i = 0; i < teams.Count; i++)
+            {
+                if (teams[i].GetTeamName() == te.GetTeamName() && teams[i].GetGame().GetTType() == te.GetGame().GetTType())
+                    teams.RemoveAt(i);
+            }
+
+            UpdateSize();
+            FlowPanel.Controls.Clear();
+            foreach (var entry in teams)
+            {
+                FlowPanel.Controls.Add(entry);
+            }
         }
 
         public int GetYear()

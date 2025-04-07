@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EsportsStatTracker
@@ -21,13 +15,26 @@ namespace EsportsStatTracker
 
         public void AddSeason(SeasonEntry season)
         {
-            int i = 0;
+            if (seasons.Count == 0)
+            {
+                seasons.Add(season);
+                FlowPanel.Controls.Clear();
+                FlowPanel.Controls.Add(season);
+                return;
+            }
 
+            int i = 0;
             while (i < seasons.Count)
             {
                 // Current season is older than seasons[i]
                 if (seasons[i].GetYear() > season.GetYear())
                 {
+                    if (i + 1 == seasons.Count)
+                    {
+                        seasons.Add(season);
+                        FlowPanel.Controls.Add(season);
+                        return;
+                    }
                     i++;
                     continue;
                 }
@@ -90,9 +97,7 @@ namespace EsportsStatTracker
             int year = DateTime.Now.Year;
             if (nepf.ShowPrompt(ref isFall, ref year) == DialogResult.OK)
             {
-                SeasonEntry seasonEntry = new SeasonEntry(isFall, year);
-                seasons.Add(seasonEntry);
-                FlowPanel.Controls.Add(seasonEntry);
+                AddSeason(new SeasonEntry(isFall, year));
             }
         }
     }
