@@ -28,6 +28,11 @@ namespace EsportsStatTracker
             return teamName;
         }
 
+        public Game GetGame()
+        {
+            return game;
+        }
+
         public void SetTitle()
         {
             string title = game.GetStringType();

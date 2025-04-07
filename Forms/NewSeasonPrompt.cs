@@ -24,12 +24,18 @@ namespace EsportsStatTracker
 
             yearSelector.Value = year;
 
-            DialogResult res = ShowDialog();
+            ShowDialog();
 
             year = (int)yearSelector.Value;
             isFall = radioFall.Checked;
 
-            return res;
+            if (MainScreen.SeasonExists(new SeasonEntry(isFall, year)))
+            {
+                MessageBox.Show("This season already exists!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return DialogResult.Cancel;
+            }
+
+            return DialogResult.OK;
         }
 
         public DialogResult ShowPrompt(ref bool? isFall, string pretext)
