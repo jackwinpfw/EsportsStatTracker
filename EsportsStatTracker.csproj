@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClassesEnums\Game.cs" />
+    <Compile Include="Classes\Game.cs" />
     <Compile Include="Forms\DeletePrompt.cs">
       <SubType>Form</SubType>
     </Compile>

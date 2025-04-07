@@ -1,7 +1,6 @@
-﻿using EsportsStatTracker.ClassesEnums;
+﻿using EsportsStatTracker.Classes;
 using EsportsStatTracker.Forms;
 using System;
-using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace EsportsStatTracker
@@ -28,6 +27,11 @@ namespace EsportsStatTracker
             return teamName;
         }
 
+        public Game GetGame()
+        {
+            return game;
+        }
+
         public void SetTitle()
         {
             string title = game.GetStringType();
@@ -40,7 +44,7 @@ namespace EsportsStatTracker
             DeletePrompt dp = new DeletePrompt();
             if (dp.ShowPrompt() == DialogResult.OK)
             {
-                Parent.Controls.Remove(this);
+                ((SeasonEntry)(Parent.Parent.Parent)).RemoveTeam(this);
             }
         }
 

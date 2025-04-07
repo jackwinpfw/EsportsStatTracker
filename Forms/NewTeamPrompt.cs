@@ -1,4 +1,4 @@
-﻿using EsportsStatTracker.ClassesEnums;
+﻿using EsportsStatTracker.Classes;
 using System.Windows.Forms;
 
 namespace EsportsStatTracker

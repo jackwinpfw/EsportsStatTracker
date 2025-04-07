@@ -63,7 +63,7 @@
             this.HeaderPanel.Controls.Add(this.SeasonTitle);
             this.HeaderPanel.Location = new System.Drawing.Point(3, 3);
             this.HeaderPanel.Name = "HeaderPanel";
-            this.HeaderPanel.Size = new System.Drawing.Size(695, 162);
+            this.HeaderPanel.Size = new System.Drawing.Size(706, 162);
             this.HeaderPanel.TabIndex = 2;
             // 
             // DeleteButton
@@ -135,7 +135,6 @@
             this.Name = "SeasonEntry";
             this.Size = new System.Drawing.Size(712, 300);
             this.TablePanel.ResumeLayout(false);
-            this.TablePanel.PerformLayout();
             this.HeaderPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
