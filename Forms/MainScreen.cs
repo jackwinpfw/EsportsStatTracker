@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -6,6 +8,7 @@ namespace EsportsStatTracker
 {
     public partial class MainScreen : Form
     {
+        private IMongoDatabase database;
         private static List<SeasonEntry> seasons = new List<SeasonEntry>();
 
         public static List<SeasonEntry> GetSeasons()
@@ -87,6 +90,17 @@ namespace EsportsStatTracker
         public MainScreen()
         {
             InitializeComponent();
+            ConnectDB();
+        }
+
+        public void ConnectDB()
+        {
+            IConfigurationRoot settings = new ConfigurationBuilder().AddJsonFile("appsettings.json", false, true).Build();
+
+            var connectionString = settings["DB_URI"];
+
+            database = new MongoClient(connectionString).GetDatabase("esports");
+
         }
 
         private void NewSeason(object sender, EventArgs e)
