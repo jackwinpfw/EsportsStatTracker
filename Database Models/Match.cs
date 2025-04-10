@@ -6,6 +6,9 @@ namespace EsportsStatTracker.Database_Models
 {
     public class Match
     {
+        [BsonId]
+        public ObjectId Id { get; set; } = ObjectId.Empty;
+
         [BsonElement("pfw_score")]
         public int PfwScore { get; set; } = 0;
 

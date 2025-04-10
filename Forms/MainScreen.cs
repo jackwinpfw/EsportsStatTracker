@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using EsportsStatTracker.Database_Models;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace EsportsStatTracker
                 else if (seasons[i].GetYear() == season.GetYear())
                 {
                     // If seasons[i] is spring, insert after, else insert before
-                    if (!seasons[i].GetIsFall())
+                    if (!seasons[i].GetSemester().Contains("F"))
                     {
                         seasons.Insert(i + 1, season);
                         break;
@@ -78,7 +79,7 @@ namespace EsportsStatTracker
             bool seasonExists = false;
             foreach (var entry in seasons)
             {
-                if (season.GetYear() == entry.GetYear() && season.GetIsFall() == entry.GetIsFall())
+                if (season.GetYear() == entry.GetYear() && season.GetSemester() == entry.GetSemester())
                 {
                     seasonExists = true;
                     break;
@@ -90,10 +91,11 @@ namespace EsportsStatTracker
         public MainScreen()
         {
             InitializeComponent();
-            ConnectDB();
+            if (!ConnectDB()) return;
+            LoadSeasons();
         }
 
-        public void ConnectDB()
+        public bool ConnectDB()
         {
             IConfigurationRoot settings = new ConfigurationBuilder().AddJsonFile("appsettings.json", false, true).Build();
 
@@ -101,17 +103,34 @@ namespace EsportsStatTracker
 
             database = new MongoClient(connectionString).GetDatabase("esports");
 
+            if (database == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public void LoadSeasons()
+        {
+            IMongoCollection<Season> collection = database.GetCollection<Season>("seasons");
+            List<Season> seasons = collection.Find(Builders<Season>.Filter.Empty).ToList();
+            foreach (Season season in seasons)
+            {
+                SeasonEntry se = new SeasonEntry(season.Semester, season.Year);
+                AddSeason(se);
+            }
         }
 
         private void NewSeason(object sender, EventArgs e)
         {
             NewSeasonPrompt nepf = new NewSeasonPrompt();
 
-            bool isFall = true;
+            string semester = "Fall";
             int year = DateTime.Now.Year;
-            if (nepf.ShowPrompt(ref isFall, ref year) == DialogResult.OK)
+            if (nepf.ShowPrompt(ref semester, ref year) == DialogResult.OK)
             {
-                AddSeason(new SeasonEntry(isFall, year));
+                AddSeason(new SeasonEntry(semester, year));
             }
         }
     }

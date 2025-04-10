@@ -10,7 +10,7 @@ namespace EsportsStatTracker
     public partial class SeasonEntry : UserControl
     {
         private List<TeamEntry> teams = new List<TeamEntry>();
-        bool isFall = true;
+        string semester;
         int year;
         public SeasonEntry()
         {
@@ -19,10 +19,10 @@ namespace EsportsStatTracker
             UpdateName();
         }
 
-        public SeasonEntry(bool isFall, int year)
+        public SeasonEntry(string semester, int year)
         {
             InitializeComponent();
-            this.isFall = isFall;
+            this.semester = semester;
             this.year = year;
             UpdateSize();
             UpdateName();
@@ -75,16 +75,16 @@ namespace EsportsStatTracker
             return year;
         }
 
-        public bool GetIsFall()
+        public string GetSemester()
         {
-            return isFall;
+            return semester;
         }
 
         private void EditSeasonClick(object sender, EventArgs e)
         {
             NewSeasonPrompt nepf = new NewSeasonPrompt();
 
-            if (nepf.ShowPrompt(ref isFall, ref year) == DialogResult.OK)
+            if (nepf.ShowPrompt(ref semester, ref year) == DialogResult.OK)
             {
                 UpdateName();
             }
@@ -127,11 +127,7 @@ namespace EsportsStatTracker
 
         private void UpdateName()
         {
-            string name = "Spring ";
-            if (isFall) name = "Fall ";
-            name += year.ToString();
-
-            SeasonTitle.Text = name;
+            SeasonTitle.Text = semester + " " + year.ToString();
         }
     }
 }

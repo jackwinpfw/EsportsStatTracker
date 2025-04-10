@@ -16,19 +16,19 @@ namespace EsportsStatTracker
         /// </summary>
         /// <param name="type">The type of information to be retrieved. Ex: "season" or "team"</param>
         /// <param name="value">The ref variable for the value to be entered into</param>
-        public DialogResult ShowPrompt(ref bool isFall, ref int year)
+        public DialogResult ShowPrompt(ref string semester, ref int year)
         {
-            radioFall.Checked = (bool)isFall;
-            radioSpring.Checked = !(bool)isFall;
+            radioFall.Checked = semester.Contains("F");
+            radioSpring.Checked = !radioFall.Checked;
 
             yearSelector.Value = year;
 
             ShowDialog();
 
             year = (int)yearSelector.Value;
-            isFall = radioFall.Checked;
+            semester = radioFall.Checked ? "Fall" : "Spring";
 
-            if (MainScreen.SeasonExists(new SeasonEntry(isFall, year)))
+            if (MainScreen.SeasonExists(new SeasonEntry(semester, year)))
             {
                 MessageBox.Show("This season already exists!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return DialogResult.Cancel;
