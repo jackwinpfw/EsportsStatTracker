@@ -9,12 +9,17 @@ namespace EsportsStatTracker
 {
     public partial class MainScreen : Form
     {
-        private IMongoDatabase database;
+        private static IMongoDatabase database;
         private static List<SeasonEntry> seasons = new List<SeasonEntry>();
 
         public static List<SeasonEntry> GetSeasons()
         {
             return seasons;
+        }
+
+        public static IMongoDatabase GetDatabase()
+        {
+            return database;
         }
 
         public void AddSeason(SeasonEntry season)
@@ -64,7 +69,6 @@ namespace EsportsStatTracker
                     seasons.Insert(i, season);
                     break;
                 }
-
             }
 
             FlowPanel.Controls.Clear();
@@ -111,6 +115,11 @@ namespace EsportsStatTracker
             return true;
         }
 
+        public void InsertData<T>(string collectionName, T data)
+        {
+            database.GetCollection<T>(collectionName).InsertOne(data);
+        }
+
         public void LoadSeasons()
         {
             IMongoCollection<Season> collection = database.GetCollection<Season>("seasons");
@@ -118,6 +127,7 @@ namespace EsportsStatTracker
             foreach (Season season in seasons)
             {
                 SeasonEntry se = new SeasonEntry(season.Semester, season.Year);
+                se.SetData(season);
                 AddSeason(se);
             }
         }
@@ -130,7 +140,12 @@ namespace EsportsStatTracker
             int year = DateTime.Now.Year;
             if (nepf.ShowPrompt(ref semester, ref year) == DialogResult.OK)
             {
-                AddSeason(new SeasonEntry(semester, year));
+                SeasonEntry entry = new SeasonEntry(semester, year);
+                Season data = new Season(semester, year);
+                InsertData("seasons", data);
+                entry.SetData(data);
+
+                AddSeason(entry);
             }
         }
     }

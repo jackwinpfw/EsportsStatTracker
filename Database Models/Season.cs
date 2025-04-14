@@ -13,5 +13,11 @@ namespace EsportsStatTracker.Database_Models
 
         [BsonElement("year")]
         public int Year { get; set; } = 0;
+
+        public Season(string Semester, int Year)
+        {
+            this.Semester = Semester;
+            this.Year = Year;
+        }
     }
 }

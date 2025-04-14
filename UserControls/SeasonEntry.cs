@@ -1,4 +1,5 @@
 ﻿using EsportsStatTracker.Classes;
+using EsportsStatTracker.Database_Models;
 using EsportsStatTracker.Forms;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace EsportsStatTracker
 {
     public partial class SeasonEntry : UserControl
     {
+        private Season data;
         private List<TeamEntry> teams = new List<TeamEntry>();
         string semester;
         int year;
@@ -17,6 +19,7 @@ namespace EsportsStatTracker
             InitializeComponent();
             UpdateSize();
             UpdateName();
+            data = null;
         }
 
         public SeasonEntry(string semester, int year)
@@ -26,6 +29,7 @@ namespace EsportsStatTracker
             this.year = year;
             UpdateSize();
             UpdateName();
+            data = null;
         }
 
         private void AddTeam(TeamEntry te)
@@ -128,6 +132,16 @@ namespace EsportsStatTracker
         private void UpdateName()
         {
             SeasonTitle.Text = semester + " " + year.ToString();
+        }
+
+        public void SetData(Season data)
+        {
+            this.data = data;
+        }
+
+        public Season GetData()
+        {
+            return data;
         }
     }
 }
