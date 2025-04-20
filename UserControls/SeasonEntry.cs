@@ -1,9 +1,12 @@
 ﻿using EsportsStatTracker.Classes;
 using EsportsStatTracker.Database_Models;
 using EsportsStatTracker.Forms;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace EsportsStatTracker
@@ -12,8 +15,6 @@ namespace EsportsStatTracker
     {
         private Season data;
         private List<TeamEntry> teams = new List<TeamEntry>();
-        string semester;
-        int year;
         public SeasonEntry()
         {
             InitializeComponent();
@@ -22,14 +23,12 @@ namespace EsportsStatTracker
             data = null;
         }
 
-        public SeasonEntry(string semester, int year)
+        public SeasonEntry(Season season)
         {
             InitializeComponent();
-            this.semester = semester;
-            this.year = year;
+            data = season;
             UpdateSize();
             UpdateName();
-            data = null;
         }
 
         private void AddTeam(TeamEntry te)
@@ -76,19 +75,21 @@ namespace EsportsStatTracker
 
         public int GetYear()
         {
-            return year;
+            return data.Year;
         }
 
         public string GetSemester()
         {
-            return semester;
+            return data.Semester;
         }
 
         private void EditSeasonClick(object sender, EventArgs e)
         {
             NewSeasonPrompt nepf = new NewSeasonPrompt();
+            string semester = data.Semester;
+            int year = data.Year;
 
-            if (nepf.ShowPrompt(ref semester, ref year) == DialogResult.OK)
+            if (nepf.EditPrompt(ref semester, ref year) == DialogResult.OK)
             {
                 UpdateName();
             }
@@ -125,13 +126,28 @@ namespace EsportsStatTracker
             DeletePrompt dp = new DeletePrompt();
             if (dp.ShowPrompt() == DialogResult.OK)
             {
+                ObjectId id = data.Id;
+                List<PlaysIn> matches;
+
+                IMongoDatabase database = MainScreen.GetDatabase();
+
+
+                matches = database.GetCollection<PlaysIn>("plays_in").Find(s => s.SeasonId == id).ToList();
+                foreach (var entry in matches)
+                {
+                    database.GetCollection<Database_Models.Match>("matches").DeleteMany(Builders<Database_Models.Match>.Filter.Eq(m => m.Id, entry.MatchId));
+                }
+                database.GetCollection<PlaysIn>("matches").DeleteMany(Builders<PlaysIn>.Filter.Eq(p => p.SeasonId, id));
+                database.GetCollection<PlaysDuring>("plays_during").DeleteMany(Builders<PlaysDuring>.Filter.Eq(p => p.SeasonId, id));
+                database.GetCollection<Season>("seasons").DeleteOne(Builders<Season>.Filter.Eq(s => s.Id, id));
+
                 Parent.Controls.Remove(this);
             }
         }
 
         private void UpdateName()
         {
-            SeasonTitle.Text = semester + " " + year.ToString();
+            SeasonTitle.Text = data.Semester + " " + data.Year.ToString();
         }
 
         public void SetData(Season data)

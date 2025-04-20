@@ -38,7 +38,7 @@
             // PromptLabel
             // 
             this.PromptLabel.AutoSize = true;
-            this.PromptLabel.Font = new System.Drawing.Font("Oswald Medium", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PromptLabel.Font = new System.Drawing.Font("Oswald Medium", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PromptLabel.Location = new System.Drawing.Point(9, 10);
             this.PromptLabel.Margin = new System.Windows.Forms.Padding(0);
             this.PromptLabel.Name = "PromptLabel";

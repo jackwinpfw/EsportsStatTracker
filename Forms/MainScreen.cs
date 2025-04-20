@@ -78,12 +78,12 @@ namespace EsportsStatTracker
             }
         }
 
-        public static bool SeasonExists(SeasonEntry season)
+        public static bool SeasonExists(Season season)
         {
             bool seasonExists = false;
             foreach (var entry in seasons)
             {
-                if (season.GetYear() == entry.GetYear() && season.GetSemester() == entry.GetSemester())
+                if (season.Year == entry.GetYear() && season.Semester == entry.GetSemester())
                 {
                     seasonExists = true;
                     break;
@@ -126,9 +126,7 @@ namespace EsportsStatTracker
             List<Season> seasons = collection.Find(Builders<Season>.Filter.Empty).ToList();
             foreach (Season season in seasons)
             {
-                SeasonEntry se = new SeasonEntry(season.Semester, season.Year);
-                se.SetData(season);
-                AddSeason(se);
+                AddSeason(new SeasonEntry(season));
             }
         }
 
@@ -140,11 +138,10 @@ namespace EsportsStatTracker
             int year = DateTime.Now.Year;
             if (nepf.ShowPrompt(ref semester, ref year) == DialogResult.OK)
             {
-                SeasonEntry entry = new SeasonEntry(semester, year);
                 Season data = new Season(semester, year);
                 InsertData("seasons", data);
-                entry.SetData(data);
 
+                SeasonEntry entry = new SeasonEntry(data);
                 AddSeason(entry);
             }
         }
