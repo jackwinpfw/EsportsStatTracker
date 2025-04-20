@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
 
 namespace EsportsStatTracker.Database_Models
 {
@@ -18,6 +19,18 @@ namespace EsportsStatTracker.Database_Models
         {
             this.Semester = Semester;
             this.Year = Year;
+        }
+
+        public void UpdateInfo(string Semester, int Year)
+        {
+            this.Semester = Semester;
+            this.Year = Year;
+
+            IMongoDatabase database = MainScreen.GetDatabase();
+            database.GetCollection<Season>("seasons").UpdateOne(
+                Builders<Season>.Filter.Eq(s => s.Id, Id),
+                Builders<Season>.Update.Set(s => s.Semester, Semester).Set(s => s.Year, Year)
+            );
         }
     }
 }

@@ -17,6 +17,17 @@ namespace EsportsStatTracker
             return seasons;
         }
 
+        public void SortSeasons()
+        {
+            SeasonEntry[] seasonEntries = seasons.ToArray();
+            seasons.Clear();
+            FlowPanel.Controls.Clear();
+            foreach (var seasonEntry in seasonEntries)
+            {
+                AddSeason(seasonEntry);
+            }
+        }
+
         public static IMongoDatabase GetDatabase()
         {
             return database;
@@ -124,9 +135,10 @@ namespace EsportsStatTracker
         {
             IMongoCollection<Season> collection = database.GetCollection<Season>("seasons");
             List<Season> seasons = collection.Find(Builders<Season>.Filter.Empty).ToList();
+
             foreach (Season season in seasons)
             {
-                AddSeason(new SeasonEntry(season));
+                AddSeason(new SeasonEntry(season, this));
             }
         }
 
@@ -141,7 +153,7 @@ namespace EsportsStatTracker
                 Season data = new Season(semester, year);
                 InsertData("seasons", data);
 
-                SeasonEntry entry = new SeasonEntry(data);
+                SeasonEntry entry = new SeasonEntry(data, this);
                 AddSeason(entry);
             }
         }

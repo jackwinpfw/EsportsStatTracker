@@ -15,20 +15,15 @@ namespace EsportsStatTracker
     {
         private Season data;
         private List<TeamEntry> teams = new List<TeamEntry>();
-        public SeasonEntry()
-        {
-            InitializeComponent();
-            UpdateSize();
-            UpdateName();
-            data = null;
-        }
+        public MainScreen MainForm { get; set; }
 
-        public SeasonEntry(Season season)
+        public SeasonEntry(Season season, MainScreen mainForm)
         {
             InitializeComponent();
             data = season;
             UpdateSize();
             UpdateName();
+            MainForm = mainForm;
         }
 
         private void AddTeam(TeamEntry te)
@@ -91,7 +86,10 @@ namespace EsportsStatTracker
 
             if (nepf.EditPrompt(ref semester, ref year) == DialogResult.OK)
             {
+                data.UpdateInfo(semester, year);
                 UpdateName();
+
+                MainForm.SortSeasons();
             }
         }
 
