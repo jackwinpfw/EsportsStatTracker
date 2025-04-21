@@ -177,7 +177,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Game.cs" />
     <Compile Include="Database Models\Match.cs" />
     <Compile Include="Database Models\Player.cs" />
     <Compile Include="Database Models\PlaysDuring.cs" />
@@ -285,6 +284,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\controller.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Classes\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

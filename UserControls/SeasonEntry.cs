@@ -1,5 +1,4 @@
-﻿using EsportsStatTracker.Classes;
-using EsportsStatTracker.Database_Models;
+﻿using EsportsStatTracker.Database_Models;
 using EsportsStatTracker.Forms;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -29,7 +28,7 @@ namespace EsportsStatTracker
         private void AddTeam(TeamEntry te)
         {
             teams.Add(te);
-            teams = teams.OrderBy(team => team.GetGame().GetTType()).ThenBy(team => team.GetTeamName()).ToList();
+            teams = teams.OrderBy(team => team.GetGame()).ThenBy(team => team.GetTeamName()).ToList();
 
             FlowPanel.Controls.Clear();
             foreach (var entry in teams)
@@ -38,12 +37,12 @@ namespace EsportsStatTracker
             }
         }
 
-        public bool TeamExists(TeamEntry te)
+        public bool TeamExists(Team te)
         {
             bool exists = false;
             foreach (var entry in teams)
             {
-                if (entry.GetTeamName() == te.GetTeamName() && entry.GetGame().GetTType() == te.GetGame().GetTType())
+                if (entry.GetTeamName() == te.Name && entry.GetGame() == te.Name)
                 {
                     exists = true;
                     break;
@@ -52,11 +51,11 @@ namespace EsportsStatTracker
             return exists;
         }
 
-        public void RemoveTeam(TeamEntry te)
+        public void DeleteTeam(TeamEntry te)
         {
             for (int i = 0; i < teams.Count; i++)
             {
-                if (teams[i].GetTeamName() == te.GetTeamName() && teams[i].GetGame().GetTType() == te.GetGame().GetTType())
+                if (teams[i].GetTeamName() == te.GetTeamName() && teams[i].GetGame() == te.GetGame())
                     teams.RemoveAt(i);
             }
 
@@ -98,18 +97,22 @@ namespace EsportsStatTracker
             NewTeamPrompt nepf = new NewTeamPrompt();
 
             string input = string.Empty;
-            Game game = new Game();
+            string game = string.Empty;
             if (nepf.ShowPrompt(ref input, ref game) == DialogResult.OK)
             {
-                TeamEntry teamEntry = new TeamEntry(input, game);
+                Team team = new Team(input, game);
 
-                if (TeamExists(teamEntry))
+                if (TeamExists(team))
                 {
                     MessageBox.Show("This team already exists! Please choose a different game or name.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                AddTeam(teamEntry);
+                MainScreen.InsertData("teams", team);
+
+                TeamEntry entry = new TeamEntry(team);
+
+                AddTeam(entry);
                 UpdateSize();
             }
         }

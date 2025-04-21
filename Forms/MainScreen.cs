@@ -126,7 +126,7 @@ namespace EsportsStatTracker
             return true;
         }
 
-        public void InsertData<T>(string collectionName, T data)
+        public static void InsertData<T>(string collectionName, T data)
         {
             database.GetCollection<T>(collectionName).InsertOne(data);
         }

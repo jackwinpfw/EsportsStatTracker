@@ -12,5 +12,11 @@ namespace EsportsStatTracker.Database_Models
         public string Name { get; set; } = string.Empty;
         [BsonElement("game")]
         public string Game { get; set; } = string.Empty;
+
+        public Team(string Name, string Game)
+        {
+            this.Name = Name;
+            this.Game = Game;
+        }
     }
 }

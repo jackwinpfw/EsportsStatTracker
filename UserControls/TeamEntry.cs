@@ -1,4 +1,4 @@
-﻿using EsportsStatTracker.Classes;
+﻿using EsportsStatTracker.Database_Models;
 using EsportsStatTracker.Forms;
 using System;
 using System.Windows.Forms;
@@ -7,35 +7,30 @@ namespace EsportsStatTracker
 {
     public partial class TeamEntry : UserControl
     {
-        Game game = new Game();
-        string teamName = string.Empty;
-        public TeamEntry()
-        {
-            InitializeComponent();
-        }
+        Team data;
 
-        public TeamEntry(string input, Game game)
+        public TeamEntry(Team data)
         {
             InitializeComponent();
-            this.game.SetTType(game.GetTType());
-            teamName = input;
+            this.data = data;
             SetTitle();
         }
 
         public string GetTeamName()
         {
-            return teamName;
+            return data.Name;
         }
 
-        public Game GetGame()
+        public string GetGame()
         {
-            return game;
+            return data.Game;
         }
 
         public void SetTitle()
         {
-            string title = game.GetStringType();
-            if (teamName != string.Empty) title += " - " + teamName;
+            string title = data.Game;
+            if (data.Name != string.Empty) title += " - " + data.Name;
+
             GameTitle.Text = title;
         }
 
@@ -44,13 +39,16 @@ namespace EsportsStatTracker
             DeletePrompt dp = new DeletePrompt();
             if (dp.ShowPrompt() == DialogResult.OK)
             {
-                ((SeasonEntry)(Parent.Parent.Parent)).RemoveTeam(this);
+                ((SeasonEntry)(Parent.Parent.Parent)).DeleteTeam(this);
             }
         }
 
         private void EditTeam(object sender, EventArgs e)
         {
             NewTeamPrompt nepf = new NewTeamPrompt();
+
+            string teamName = data.Name;
+            string game = data.Game;
 
             if (nepf.ShowPrompt(ref teamName, ref game) == DialogResult.OK)
             {
