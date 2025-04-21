@@ -5,16 +5,15 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace EsportsStatTracker
 {
     public partial class SeasonEntry : UserControl
     {
+        public MainScreen MainForm { get; set; }
         private Season data;
         private List<TeamEntry> teams = new List<TeamEntry>();
-        public MainScreen MainForm { get; set; }
 
         public SeasonEntry(Season season, MainScreen mainForm)
         {
@@ -39,16 +38,14 @@ namespace EsportsStatTracker
 
         public bool TeamExists(Team te)
         {
-            bool exists = false;
             foreach (var entry in teams)
             {
                 if (entry.GetTeamName() == te.Name && entry.GetGame() == te.Name)
                 {
-                    exists = true;
-                    break;
+                    return true;
                 }
             }
-            return exists;
+            return false;
         }
 
         public void DeleteTeam(TeamEntry te)
@@ -110,10 +107,13 @@ namespace EsportsStatTracker
 
                 MainScreen.InsertData("teams", team);
 
-                TeamEntry entry = new TeamEntry(team);
+                TeamEntry entry = new TeamEntry(team, this);
 
                 AddTeam(entry);
                 UpdateSize();
+
+                PlaysDuring playsDuring = new PlaysDuring(team.Id, data.Id);
+                MainScreen.InsertData("plays_during", playsDuring);
             }
         }
 
@@ -136,7 +136,7 @@ namespace EsportsStatTracker
                 matches = database.GetCollection<PlaysIn>("plays_in").Find(s => s.SeasonId == id).ToList();
                 foreach (var entry in matches)
                 {
-                    database.GetCollection<Database_Models.Match>("matches").DeleteMany(Builders<Database_Models.Match>.Filter.Eq(m => m.Id, entry.MatchId));
+                    database.GetCollection<Match>("matches").DeleteMany(Builders<Match>.Filter.Eq(m => m.Id, entry.MatchId));
                 }
                 database.GetCollection<PlaysIn>("matches").DeleteMany(Builders<PlaysIn>.Filter.Eq(p => p.SeasonId, id));
                 database.GetCollection<PlaysDuring>("plays_during").DeleteMany(Builders<PlaysDuring>.Filter.Eq(p => p.SeasonId, id));

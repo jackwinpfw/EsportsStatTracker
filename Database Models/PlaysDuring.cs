@@ -10,5 +10,11 @@ namespace EsportsStatTracker.Database_Models
 
         [BsonElement("seasonId")]
         public ObjectId SeasonId;
+
+        public PlaysDuring(ObjectId teamId, ObjectId seasonId)
+        {
+            TeamId = teamId;
+            SeasonId = seasonId;
+        }
     }
 }

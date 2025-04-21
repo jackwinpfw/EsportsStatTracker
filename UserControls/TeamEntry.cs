@@ -1,19 +1,24 @@
 ﻿using EsportsStatTracker.Database_Models;
 using EsportsStatTracker.Forms;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace EsportsStatTracker
 {
     public partial class TeamEntry : UserControl
     {
+        public SeasonEntry Season { get; set; }
         Team data;
 
-        public TeamEntry(Team data)
+        public TeamEntry(Team data, SeasonEntry season)
         {
             InitializeComponent();
             this.data = data;
             SetTitle();
+            Season = season;
         }
 
         public string GetTeamName()
@@ -39,7 +44,23 @@ namespace EsportsStatTracker
             DeletePrompt dp = new DeletePrompt();
             if (dp.ShowPrompt() == DialogResult.OK)
             {
-                ((SeasonEntry)(Parent.Parent.Parent)).DeleteTeam(this);
+                ObjectId id = data.Id;
+                List<PlaysIn> matches;
+
+                IMongoDatabase database = MainScreen.GetDatabase();
+
+
+                matches = database.GetCollection<PlaysIn>("plays_in").Find(t => t.TeamId == id).ToList();
+                foreach (var entry in matches)
+                {
+                    database.GetCollection<Match>("matches").DeleteMany(Builders<Match>.Filter.Eq(m => m.Id, entry.MatchId));
+                }
+                database.GetCollection<PlaysIn>("plays_in").DeleteMany(Builders<PlaysIn>.Filter.Eq(p => p.TeamId, id));
+                database.GetCollection<PlaysOn>("plays_on").DeleteMany(Builders<PlaysOn>.Filter.Eq(p => p.TeamId, id));
+                database.GetCollection<PlaysDuring>("plays_during").DeleteMany(Builders<PlaysDuring>.Filter.Eq(p => p.TeamId, id));
+                database.GetCollection<Team>("teams").DeleteOne(Builders<Team>.Filter.Eq(t => t.Id, id));
+
+                Parent.Controls.Remove(this);
             }
         }
 
@@ -52,6 +73,7 @@ namespace EsportsStatTracker
 
             if (nepf.ShowPrompt(ref teamName, ref game) == DialogResult.OK)
             {
+                data.UpdateInfo(teamName, game);
                 SetTitle();
             }
         }
