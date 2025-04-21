@@ -6,6 +6,9 @@ namespace EsportsStatTracker.Database_Models
 {
     public class PlaysIn
     {
+        [BsonId]
+        public ObjectId Id { get; set; } = ObjectId.Empty;
+
         [BsonElement("seasonId")]
         public ObjectId SeasonId;
 

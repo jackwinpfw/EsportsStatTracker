@@ -10,15 +10,15 @@ namespace EsportsStatTracker
 {
     public partial class TeamEntry : UserControl
     {
-        public SeasonEntry Season { get; set; }
+        public SeasonEntry ParentSeason { get; set; }
         Team data;
 
-        public TeamEntry(Team data, SeasonEntry season)
+        public TeamEntry(Team data, SeasonEntry ParentSeason)
         {
             InitializeComponent();
             this.data = data;
             SetTitle();
-            Season = season;
+            this.ParentSeason = ParentSeason;
         }
 
         public string GetTeamName()

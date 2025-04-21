@@ -24,7 +24,7 @@ namespace EsportsStatTracker
             MainForm = mainForm;
         }
 
-        private void AddTeam(TeamEntry te)
+        public void AddTeam(TeamEntry te)
         {
             teams.Add(te);
             teams = teams.OrderBy(team => team.GetGame()).ThenBy(team => team.GetTeamName()).ToList();
@@ -34,6 +34,8 @@ namespace EsportsStatTracker
             {
                 FlowPanel.Controls.Add(entry);
             }
+
+            UpdateSize();
         }
 
         public bool TeamExists(Team te)
@@ -46,22 +48,6 @@ namespace EsportsStatTracker
                 }
             }
             return false;
-        }
-
-        public void DeleteTeam(TeamEntry te)
-        {
-            for (int i = 0; i < teams.Count; i++)
-            {
-                if (teams[i].GetTeamName() == te.GetTeamName() && teams[i].GetGame() == te.GetGame())
-                    teams.RemoveAt(i);
-            }
-
-            UpdateSize();
-            FlowPanel.Controls.Clear();
-            foreach (var entry in teams)
-            {
-                FlowPanel.Controls.Add(entry);
-            }
         }
 
         public int GetYear()
@@ -110,7 +96,6 @@ namespace EsportsStatTracker
                 TeamEntry entry = new TeamEntry(team, this);
 
                 AddTeam(entry);
-                UpdateSize();
 
                 PlaysDuring playsDuring = new PlaysDuring(team.Id, data.Id);
                 MainScreen.InsertData("plays_during", playsDuring);

@@ -136,9 +136,24 @@ namespace EsportsStatTracker
             IMongoCollection<Season> collection = database.GetCollection<Season>("seasons");
             List<Season> seasons = collection.Find(Builders<Season>.Filter.Empty).ToList();
 
-            foreach (Season season in seasons)
+            foreach (Season seasonData in seasons)
             {
-                AddSeason(new SeasonEntry(season, this));
+                SeasonEntry season = new SeasonEntry(seasonData, this);
+                AddSeason(season);
+
+                IMongoCollection<PlaysDuring> PDCollection = database.GetCollection<PlaysDuring>("plays_during");
+                List<PlaysDuring> playsDurings = PDCollection.Find(Builders<PlaysDuring>.Filter.Eq(pd => pd.SeasonId, seasonData.Id)).ToList();
+
+                IMongoCollection<Team> teamCollection = database.GetCollection<Team>("teams");
+
+                foreach (PlaysDuring playsDuring in playsDurings)
+                {
+                    Team team = teamCollection.Find(Builders<Team>.Filter.Eq(t => t.Id, playsDuring.TeamId)).First();
+
+                    TeamEntry teamEntry = new TeamEntry(team, season);
+
+                    season.AddTeam(teamEntry);
+                }
             }
         }
 
