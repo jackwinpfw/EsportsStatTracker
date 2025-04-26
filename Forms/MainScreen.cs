@@ -172,5 +172,10 @@ namespace EsportsStatTracker
                 AddSeason(entry);
             }
         }
+
+        public void DeleteSeason(SeasonEntry season)
+        {
+            seasons.Remove(season);
+        }
     }
 }

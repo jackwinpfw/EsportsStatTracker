@@ -11,14 +11,14 @@ namespace EsportsStatTracker
 {
     public partial class SeasonEntry : UserControl
     {
-        public MainScreen MainForm { get; set; }
-        private Season data;
+        private Season Data;
         private List<TeamEntry> teams = new List<TeamEntry>();
+        private MainScreen MainForm { get; set; }
 
         public SeasonEntry(Season season, MainScreen mainForm)
         {
             InitializeComponent();
-            data = season;
+            Data = season;
             UpdateSize();
             UpdateName();
             MainForm = mainForm;
@@ -52,23 +52,23 @@ namespace EsportsStatTracker
 
         public int GetYear()
         {
-            return data.Year;
+            return Data.Year;
         }
 
         public string GetSemester()
         {
-            return data.Semester;
+            return Data.Semester;
         }
 
         private void EditSeasonClick(object sender, EventArgs e)
         {
             NewSeasonPrompt nepf = new NewSeasonPrompt();
-            string semester = data.Semester;
-            int year = data.Year;
+            string semester = Data.Semester;
+            int year = Data.Year;
 
             if (nepf.EditPrompt(ref semester, ref year) == DialogResult.OK)
             {
-                data.UpdateInfo(semester, year);
+                Data.UpdateInfo(semester, year);
                 UpdateName();
 
                 MainForm.SortSeasons();
@@ -97,7 +97,7 @@ namespace EsportsStatTracker
 
                 AddTeam(entry);
 
-                PlaysDuring playsDuring = new PlaysDuring(team.Id, data.Id);
+                PlaysDuring playsDuring = new PlaysDuring(team.Id, Data.Id);
                 MainScreen.InsertData("plays_during", playsDuring);
             }
         }
@@ -112,38 +112,43 @@ namespace EsportsStatTracker
             DeletePrompt dp = new DeletePrompt();
             if (dp.ShowPrompt() == DialogResult.OK)
             {
-                ObjectId id = data.Id;
-                List<PlaysIn> matches;
+                ObjectId id = Data.Id;
 
                 IMongoDatabase database = MainScreen.GetDatabase();
 
 
-                matches = database.GetCollection<PlaysIn>("plays_in").Find(s => s.SeasonId == id).ToList();
-                foreach (var entry in matches)
+                TeamEntry[] teamEntries = teams.ToArray();
+                foreach (TeamEntry entry in teamEntries)
                 {
-                    database.GetCollection<Match>("matches").DeleteMany(Builders<Match>.Filter.Eq(m => m.Id, entry.MatchId));
+                    entry.DeleteTeam();
                 }
-                database.GetCollection<PlaysIn>("matches").DeleteMany(Builders<PlaysIn>.Filter.Eq(p => p.SeasonId, id));
-                database.GetCollection<PlaysDuring>("plays_during").DeleteMany(Builders<PlaysDuring>.Filter.Eq(p => p.SeasonId, id));
+                
                 database.GetCollection<Season>("seasons").DeleteOne(Builders<Season>.Filter.Eq(s => s.Id, id));
 
+                MainForm.DeleteSeason(this);
                 Parent.Controls.Remove(this);
             }
         }
 
         private void UpdateName()
         {
-            SeasonTitle.Text = data.Semester + " " + data.Year.ToString();
+            SeasonTitle.Text = Data.Semester + " " + Data.Year.ToString();
+        }
+
+        public void DeleteTeam(TeamEntry deletee)
+        {
+            teams.Remove(deletee);
+            UpdateSize();
         }
 
         public void SetData(Season data)
         {
-            this.data = data;
+            this.Data = data;
         }
 
         public Season GetData()
         {
-            return data;
+            return Data;
         }
     }
 }

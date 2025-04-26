@@ -12,6 +12,9 @@ namespace EsportsStatTracker.Database_Models
         [BsonElement("pfw_score")]
         public int PfwScore { get; set; } = 0;
 
+        [BsonElement("opp_name")]
+        public string OppName { get; set; } = string.Empty;
+
         [BsonElement("opp_score")]
         public int OppScore { get; set; } = 0;
 
@@ -19,6 +22,14 @@ namespace EsportsStatTracker.Database_Models
         public DateTime DatePlayed { get; set; } = DateTime.Now;
 
         [BsonElement("extra_data")]
-        public BsonDocument ExtraData { get; set; } = new BsonDocument();
+        public BsonDocument ExtraData { get; set; } = null;
+
+        public Match(int pfwscore, string oppname, int oppscore, DateTime date)
+        {
+            PfwScore = pfwscore;
+            OppName = oppname;
+            OppScore = oppscore;
+            DatePlayed = date;
+        }
     }
 }

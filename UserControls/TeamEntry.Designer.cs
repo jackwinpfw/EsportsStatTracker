@@ -85,6 +85,7 @@
             this.EditGamesButton.Size = new System.Drawing.Size(60, 60);
             this.EditGamesButton.TabIndex = 1;
             this.EditGamesButton.UseVisualStyleBackColor = true;
+            this.EditGamesButton.Click += new System.EventHandler(this.EditGames);
             // 
             // TeamEntry
             // 
