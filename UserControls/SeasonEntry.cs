@@ -1,5 +1,7 @@
-﻿using EsportsStatTracker.Classes;
+﻿using EsportsStatTracker.Database_Models;
 using EsportsStatTracker.Forms;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,84 +11,67 @@ namespace EsportsStatTracker
 {
     public partial class SeasonEntry : UserControl
     {
+        public MainScreen MainForm { get; set; }
+        private Season data;
         private List<TeamEntry> teams = new List<TeamEntry>();
-        bool isFall = true;
-        int year;
-        public SeasonEntry()
+
+        public SeasonEntry(Season season, MainScreen mainForm)
         {
             InitializeComponent();
+            data = season;
             UpdateSize();
             UpdateName();
+            MainForm = mainForm;
         }
 
-        public SeasonEntry(bool isFall, int year)
-        {
-            InitializeComponent();
-            this.isFall = isFall;
-            this.year = year;
-            UpdateSize();
-            UpdateName();
-        }
-
-        private void AddTeam(TeamEntry te)
+        public void AddTeam(TeamEntry te)
         {
             teams.Add(te);
-            teams = teams.OrderBy(team => team.GetGame().GetTType()).ThenBy(team => team.GetTeamName()).ToList();
+            teams = teams.OrderBy(team => team.GetGame()).ThenBy(team => team.GetTeamName()).ToList();
 
             FlowPanel.Controls.Clear();
             foreach (var entry in teams)
             {
                 FlowPanel.Controls.Add(entry);
-            }
-        }
-
-        public bool TeamExists(TeamEntry te)
-        {
-            bool exists = false;
-            foreach (var entry in teams)
-            {
-                if (entry.GetTeamName() == te.GetTeamName() && entry.GetGame().GetTType() == te.GetGame().GetTType())
-                {
-                    exists = true;
-                    break;
-                }
-            }
-            return exists;
-        }
-
-        public void RemoveTeam(TeamEntry te)
-        {
-            for (int i = 0; i < teams.Count; i++)
-            {
-                if (teams[i].GetTeamName() == te.GetTeamName() && teams[i].GetGame().GetTType() == te.GetGame().GetTType())
-                    teams.RemoveAt(i);
             }
 
             UpdateSize();
-            FlowPanel.Controls.Clear();
+        }
+
+        public bool TeamExists(Team te)
+        {
             foreach (var entry in teams)
             {
-                FlowPanel.Controls.Add(entry);
+                if (entry.GetTeamName() == te.Name && entry.GetGame() == te.Name)
+                {
+                    return true;
+                }
             }
+            return false;
         }
 
         public int GetYear()
         {
-            return year;
+            return data.Year;
         }
 
-        public bool GetIsFall()
+        public string GetSemester()
         {
-            return isFall;
+            return data.Semester;
         }
 
         private void EditSeasonClick(object sender, EventArgs e)
         {
             NewSeasonPrompt nepf = new NewSeasonPrompt();
+            string semester = data.Semester;
+            int year = data.Year;
 
-            if (nepf.ShowPrompt(ref isFall, ref year) == DialogResult.OK)
+            if (nepf.EditPrompt(ref semester, ref year) == DialogResult.OK)
             {
+                data.UpdateInfo(semester, year);
                 UpdateName();
+
+                MainForm.SortSeasons();
             }
         }
 
@@ -95,19 +80,25 @@ namespace EsportsStatTracker
             NewTeamPrompt nepf = new NewTeamPrompt();
 
             string input = string.Empty;
-            Game game = new Game();
+            string game = string.Empty;
             if (nepf.ShowPrompt(ref input, ref game) == DialogResult.OK)
             {
-                TeamEntry teamEntry = new TeamEntry(input, game);
+                Team team = new Team(input, game);
 
-                if (TeamExists(teamEntry))
+                if (TeamExists(team))
                 {
                     MessageBox.Show("This team already exists! Please choose a different game or name.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                AddTeam(teamEntry);
-                UpdateSize();
+                MainScreen.InsertData("teams", team);
+
+                TeamEntry entry = new TeamEntry(team, this);
+
+                AddTeam(entry);
+
+                PlaysDuring playsDuring = new PlaysDuring(team.Id, data.Id);
+                MainScreen.InsertData("plays_during", playsDuring);
             }
         }
 
@@ -121,17 +112,38 @@ namespace EsportsStatTracker
             DeletePrompt dp = new DeletePrompt();
             if (dp.ShowPrompt() == DialogResult.OK)
             {
+                ObjectId id = data.Id;
+                List<PlaysIn> matches;
+
+                IMongoDatabase database = MainScreen.GetDatabase();
+
+
+                matches = database.GetCollection<PlaysIn>("plays_in").Find(s => s.SeasonId == id).ToList();
+                foreach (var entry in matches)
+                {
+                    database.GetCollection<Match>("matches").DeleteMany(Builders<Match>.Filter.Eq(m => m.Id, entry.MatchId));
+                }
+                database.GetCollection<PlaysIn>("matches").DeleteMany(Builders<PlaysIn>.Filter.Eq(p => p.SeasonId, id));
+                database.GetCollection<PlaysDuring>("plays_during").DeleteMany(Builders<PlaysDuring>.Filter.Eq(p => p.SeasonId, id));
+                database.GetCollection<Season>("seasons").DeleteOne(Builders<Season>.Filter.Eq(s => s.Id, id));
+
                 Parent.Controls.Remove(this);
             }
         }
 
         private void UpdateName()
         {
-            string name = "Spring ";
-            if (isFall) name = "Fall ";
-            name += year.ToString();
+            SeasonTitle.Text = data.Semester + " " + data.Year.ToString();
+        }
 
-            SeasonTitle.Text = name;
+        public void SetData(Season data)
+        {
+            this.data = data;
+        }
+
+        public Season GetData()
+        {
+            return data;
         }
     }
 }

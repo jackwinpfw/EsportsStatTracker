@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using EsportsStatTracker.Database_Models;
+using System.Windows.Forms;
 
 namespace EsportsStatTracker
 {
@@ -16,19 +17,19 @@ namespace EsportsStatTracker
         /// </summary>
         /// <param name="type">The type of information to be retrieved. Ex: "season" or "team"</param>
         /// <param name="value">The ref variable for the value to be entered into</param>
-        public DialogResult ShowPrompt(ref bool isFall, ref int year)
+        public DialogResult ShowPrompt(ref string semester, ref int year)
         {
-            radioFall.Checked = (bool)isFall;
-            radioSpring.Checked = !(bool)isFall;
+            radioFall.Checked = semester.Contains("F");
+            radioSpring.Checked = !radioFall.Checked;
 
             yearSelector.Value = year;
 
-            ShowDialog();
+            if (ShowDialog() != DialogResult.OK) return DialogResult.Cancel;
 
             year = (int)yearSelector.Value;
-            isFall = radioFall.Checked;
+            semester = radioFall.Checked ? "Fall" : "Spring";
 
-            if (MainScreen.SeasonExists(new SeasonEntry(isFall, year)))
+            if (MainScreen.SeasonExists(new Season(semester, year)))
             {
                 MessageBox.Show("This season already exists!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return DialogResult.Cancel;
@@ -37,19 +38,27 @@ namespace EsportsStatTracker
             return DialogResult.OK;
         }
 
-        public DialogResult ShowPrompt(ref bool? isFall, string pretext)
+        public DialogResult EditPrompt(ref string semester, ref int year)
         {
-            if (isFall != null)
+            radioFall.Checked = semester.Contains("F");
+            radioSpring.Checked = !radioFall.Checked;
+
+            yearSelector.Value = year;
+
+            if (ShowDialog() != DialogResult.OK) return DialogResult.Cancel;
+
+            if (year == (int)yearSelector.Value && semester == (radioFall.Checked ? "Fall" : "Spring")) return DialogResult.Cancel;
+
+            year = (int)yearSelector.Value;
+            semester = radioFall.Checked ? "Fall" : "Spring";
+
+            if (MainScreen.SeasonExists(new Season(semester, year)))
             {
-                radioFall.Checked = (bool)isFall;
-                radioSpring.Checked = !(bool)isFall;
+                MessageBox.Show("This season already exists!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return DialogResult.Cancel;
             }
 
-            // set radios
-            DialogResult res = ShowDialog();
-
-            isFall = true;
-            return res;
+            return DialogResult.OK;
         }
     }
 }

@@ -1,41 +1,41 @@
-﻿using EsportsStatTracker.Classes;
+﻿using EsportsStatTracker.Database_Models;
 using EsportsStatTracker.Forms;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace EsportsStatTracker
 {
     public partial class TeamEntry : UserControl
     {
-        Game game = new Game();
-        string teamName = string.Empty;
-        public TeamEntry()
-        {
-            InitializeComponent();
-        }
+        public SeasonEntry ParentSeason { get; set; }
+        Team data;
 
-        public TeamEntry(string input, Game game)
+        public TeamEntry(Team data, SeasonEntry ParentSeason)
         {
             InitializeComponent();
-            this.game.SetTType(game.GetTType());
-            teamName = input;
+            this.data = data;
             SetTitle();
+            this.ParentSeason = ParentSeason;
         }
 
         public string GetTeamName()
         {
-            return teamName;
+            return data.Name;
         }
 
-        public Game GetGame()
+        public string GetGame()
         {
-            return game;
+            return data.Game;
         }
 
         public void SetTitle()
         {
-            string title = game.GetStringType();
-            if (teamName != string.Empty) title += " - " + teamName;
+            string title = data.Game;
+            if (data.Name != string.Empty) title += " - " + data.Name;
+
             GameTitle.Text = title;
         }
 
@@ -44,7 +44,23 @@ namespace EsportsStatTracker
             DeletePrompt dp = new DeletePrompt();
             if (dp.ShowPrompt() == DialogResult.OK)
             {
-                ((SeasonEntry)(Parent.Parent.Parent)).RemoveTeam(this);
+                ObjectId id = data.Id;
+                List<PlaysIn> matches;
+
+                IMongoDatabase database = MainScreen.GetDatabase();
+
+
+                matches = database.GetCollection<PlaysIn>("plays_in").Find(t => t.TeamId == id).ToList();
+                foreach (var entry in matches)
+                {
+                    database.GetCollection<Match>("matches").DeleteMany(Builders<Match>.Filter.Eq(m => m.Id, entry.MatchId));
+                }
+                database.GetCollection<PlaysIn>("plays_in").DeleteMany(Builders<PlaysIn>.Filter.Eq(p => p.TeamId, id));
+                database.GetCollection<PlaysOn>("plays_on").DeleteMany(Builders<PlaysOn>.Filter.Eq(p => p.TeamId, id));
+                database.GetCollection<PlaysDuring>("plays_during").DeleteMany(Builders<PlaysDuring>.Filter.Eq(p => p.TeamId, id));
+                database.GetCollection<Team>("teams").DeleteOne(Builders<Team>.Filter.Eq(t => t.Id, id));
+
+                Parent.Controls.Remove(this);
             }
         }
 
@@ -52,8 +68,12 @@ namespace EsportsStatTracker
         {
             NewTeamPrompt nepf = new NewTeamPrompt();
 
+            string teamName = data.Name;
+            string game = data.Game;
+
             if (nepf.ShowPrompt(ref teamName, ref game) == DialogResult.OK)
             {
+                data.UpdateInfo(teamName, game);
                 SetTitle();
             }
         }
