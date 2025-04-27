@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EsportsStatTracker.Database_Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,14 +18,19 @@ namespace EsportsStatTracker.Forms
             InitializeComponent();
         }
 
-        public DialogResult ShowPrompt(ref int pfwScore, ref string oppName, ref int oppScore, ref DateTime gameDate)
+        public DialogResult ShowPrompt(ref Match match)
         {
+            PFWScore.Value = match.PfwScore;
+            OppNameBox.Text = match.OppName;
+            OppScore.Value = match.OppScore;
+            DatePicker.Value = match.DatePlayed;
+
             DialogResult res = ShowDialog();
 
-            pfwScore = (int)PFWScore.Value;
-            oppName = OppNameBox.Text;
-            oppScore = (int)OppScore.Value;
-            gameDate = DatePicker.Value;
+            match.PfwScore = (int)PFWScore.Value;
+            match.OppName = OppNameBox.Text;
+            match.OppScore = (int)OppScore.Value;
+            match.DatePlayed = DatePicker.Value;
 
             return res;
         }

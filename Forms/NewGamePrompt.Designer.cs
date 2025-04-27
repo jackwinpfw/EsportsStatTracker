@@ -134,8 +134,12 @@
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.OppNameBox);
             this.Controls.Add(this.PFWLabel);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "NewGamePrompt";
-            this.Text = "NewGamePrompt";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             ((System.ComponentModel.ISupportInitialize)(this.PFWScore)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.OppScore)).EndInit();
             this.ResumeLayout(false);

@@ -1,13 +1,6 @@
 ﻿using EsportsStatTracker.Database_Models;
 using EsportsStatTracker.Forms;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EsportsStatTracker.UserControls
@@ -34,6 +27,30 @@ namespace EsportsStatTracker.UserControls
             if (Data.OppName != string.Empty) title += " vs " + Data.OppName;
 
             return title;
+        }
+
+        private void EditMatch(object sender, EventArgs e)
+        {
+            NewGamePrompt ngp = new NewGamePrompt();
+
+            Match m = new Match(
+                Data.PfwScore,
+                Data.OppName,
+                Data.OppScore,
+                Data.DatePlayed
+            );
+
+            if (ngp.ShowPrompt(ref m) == DialogResult.OK)
+            {
+                if (Team.MatchExists(m))
+                {
+                    MessageBox.Show("This match already exists! Please choose a different date or name.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                Data.UpdateInfo(m);
+                Title.Text = GetTitle();
+            }
         }
     }
 }

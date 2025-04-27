@@ -11,14 +11,14 @@ namespace EsportsStatTracker
     public partial class TeamEntry : UserControl
     {
         private Team Data;
-        private SeasonEntry ParentSeason { get; set; }
+        private SeasonEntry Season { get; set; }
 
-        public TeamEntry(Team data, SeasonEntry ParentSeason)
+        public TeamEntry(Team Data, SeasonEntry Season)
         {
             InitializeComponent();
-            this.Data = data;
+            this.Data = Data;
             GameTitle.Text = GetTitle();
-            this.ParentSeason = ParentSeason;
+            this.Season = Season;
         }
 
         public ObjectId GetObjectId()
@@ -62,7 +62,7 @@ namespace EsportsStatTracker
             database.GetCollection<PlaysDuring>("plays_during").DeleteMany(Builders<PlaysDuring>.Filter.Eq(p => p.TeamId, id));
             database.GetCollection<Team>("teams").DeleteOne(Builders<Team>.Filter.Eq(t => t.Id, id));
 
-            ParentSeason.DeleteTeam(this);
+            Season.DeleteTeam(this);
             Parent.Controls.Remove(this);
         }
 
@@ -79,12 +79,17 @@ namespace EsportsStatTracker
         {
             NewTeamPrompt nepf = new NewTeamPrompt();
 
-            string teamName = Data.Name;
-            string game = Data.Game;
+            Team t = new Team(Data.Name, Data.Game);
 
-            if (nepf.ShowPrompt(ref teamName, ref game) == DialogResult.OK)
+            if (nepf.ShowPrompt(ref t) == DialogResult.OK)
             {
-                Data.UpdateInfo(teamName, game);
+                if (Season.TeamExists(t))
+                {
+                    MessageBox.Show("This team already exists! Please choose a different game or name.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                Data.UpdateInfo(t);
                 GameTitle.Text = GetTitle();
             }
         }

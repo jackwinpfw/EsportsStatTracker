@@ -38,11 +38,11 @@ namespace EsportsStatTracker
             UpdateSize();
         }
 
-        public bool TeamExists(Team te)
+        public bool TeamExists(Team t)
         {
-            foreach (var entry in teams)
+            foreach (TeamEntry entry in teams)
             {
-                if (entry.GetTeamName() == te.Name && entry.GetGame() == te.Name)
+                if (entry.GetTeamName() == t.Name && entry.GetGame() == t.Game)
                 {
                     return true;
                 }
@@ -63,12 +63,12 @@ namespace EsportsStatTracker
         private void EditSeasonClick(object sender, EventArgs e)
         {
             NewSeasonPrompt nepf = new NewSeasonPrompt();
-            string semester = Data.Semester;
-            int year = Data.Year;
 
-            if (nepf.EditPrompt(ref semester, ref year) == DialogResult.OK)
+            Season s = new Season(Data.Semester, Data.Year);
+
+            if (nepf.EditPrompt(ref s) == DialogResult.OK)
             {
-                Data.UpdateInfo(semester, year);
+                Data.UpdateInfo(s);
                 UpdateName();
 
                 MainForm.SortSeasons();
@@ -79,25 +79,23 @@ namespace EsportsStatTracker
         {
             NewTeamPrompt nepf = new NewTeamPrompt();
 
-            string input = string.Empty;
-            string game = string.Empty;
-            if (nepf.ShowPrompt(ref input, ref game) == DialogResult.OK)
-            {
-                Team team = new Team(input, game);
+            Team t = new Team();
 
-                if (TeamExists(team))
+            if (nepf.ShowPrompt(ref t) == DialogResult.OK)
+            {
+                if (TeamExists(t))
                 {
                     MessageBox.Show("This team already exists! Please choose a different game or name.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                MainScreen.InsertData("teams", team);
+                MainScreen.InsertData("teams", t);
 
-                TeamEntry entry = new TeamEntry(team, this);
+                TeamEntry entry = new TeamEntry(t, this);
 
                 AddTeam(entry);
 
-                PlaysDuring playsDuring = new PlaysDuring(team.Id, Data.Id);
+                PlaysDuring playsDuring = new PlaysDuring(t.Id, Data.Id);
                 MainScreen.InsertData("plays_during", playsDuring);
             }
         }

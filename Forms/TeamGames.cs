@@ -3,12 +3,8 @@ using EsportsStatTracker.UserControls;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EsportsStatTracker.Forms
@@ -46,7 +42,7 @@ namespace EsportsStatTracker.Forms
             }
         }
 
-        private bool MatchExists(Match ma)
+        public bool MatchExists(Match ma)
         {
             foreach (Match match in Matches)
             {
@@ -75,27 +71,23 @@ namespace EsportsStatTracker.Forms
         {
             NewGamePrompt ngp = new NewGamePrompt();
 
-            string oppName = string.Empty;
-            int pfwScore = 0, oppScore = 0;
-            DateTime gameDate = DateTime.Now;
+            Match m = new Match();
 
-            if (ngp.ShowPrompt(ref pfwScore, ref oppName, ref oppScore, ref gameDate) == DialogResult.OK)
+            if (ngp.ShowPrompt(ref m) == DialogResult.OK)
             {
-                Match match = new Match(pfwScore, oppName, oppScore, gameDate);
-
-                if (MatchExists(match))
+                if (MatchExists(m))
                 {
                     MessageBox.Show("This match already exists! Please choose a different date or name.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                MainScreen.InsertData("matches", match);
+                MainScreen.InsertData("matches", m);
 
-                AddMatch(match);
+                AddMatch(m);
 
-                GameEntry ge = new GameEntry(match, this);
+                GameEntry ge = new GameEntry(m, this);
 
-                PlaysIn playsIn = new PlaysIn(ParentEntry.GetObjectId(), match.Id);
+                PlaysIn playsIn = new PlaysIn(ParentEntry.GetObjectId(), m.Id);
                 MainScreen.InsertData("plays_in", playsIn);
             }
         }

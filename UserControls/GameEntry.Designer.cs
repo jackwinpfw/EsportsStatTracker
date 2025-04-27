@@ -65,6 +65,7 @@
             this.EditMatchButton.Size = new System.Drawing.Size(60, 60);
             this.EditMatchButton.TabIndex = 5;
             this.EditMatchButton.UseVisualStyleBackColor = true;
+            this.EditMatchButton.Click += new System.EventHandler(this.EditMatch);
             // 
             // GameEntry
             // 
