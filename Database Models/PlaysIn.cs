@@ -9,9 +9,6 @@ namespace EsportsStatTracker.Database_Models
         [BsonId]
         public ObjectId Id { get; set; } = ObjectId.Empty;
 
-        [BsonElement("seasonId")]
-        public ObjectId SeasonId;
-
         [BsonElement("teamId")]
         public ObjectId TeamId;
 
@@ -20,5 +17,12 @@ namespace EsportsStatTracker.Database_Models
 
         [BsonElement("playerIds")]
         public List<ObjectId> PlayerIds;
+
+        public PlaysIn(ObjectId teamId, ObjectId matchId)
+        {
+            TeamId = teamId;
+            MatchId = matchId;
+            PlayerIds = new List<ObjectId>();
+        }
     }
 }

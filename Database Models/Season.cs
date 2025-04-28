@@ -15,16 +15,18 @@ namespace EsportsStatTracker.Database_Models
         [BsonElement("year")]
         public int Year { get; set; } = 0;
 
+        public Season() { }
+
         public Season(string Semester, int Year)
         {
             this.Semester = Semester;
             this.Year = Year;
         }
 
-        public void UpdateInfo(string Semester, int Year)
+        public void UpdateInfo(Season season)
         {
-            this.Semester = Semester;
-            this.Year = Year;
+            Semester = season.Semester;
+            Year = season.Year;
 
             IMongoDatabase database = MainScreen.GetDatabase();
             database.GetCollection<Season>("seasons").UpdateOne(

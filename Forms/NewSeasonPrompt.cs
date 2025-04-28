@@ -38,21 +38,21 @@ namespace EsportsStatTracker
             return DialogResult.OK;
         }
 
-        public DialogResult EditPrompt(ref string semester, ref int year)
+        public DialogResult EditPrompt(ref Season season)
         {
-            radioFall.Checked = semester.Contains("F");
+            radioFall.Checked = season.Semester.Contains("F");
             radioSpring.Checked = !radioFall.Checked;
 
-            yearSelector.Value = year;
+            yearSelector.Value = season.Year;
 
             if (ShowDialog() != DialogResult.OK) return DialogResult.Cancel;
 
-            if (year == (int)yearSelector.Value && semester == (radioFall.Checked ? "Fall" : "Spring")) return DialogResult.Cancel;
+            if (season.Year == (int)yearSelector.Value && season.Semester == (radioFall.Checked ? "Fall" : "Spring")) return DialogResult.Cancel;
 
-            year = (int)yearSelector.Value;
-            semester = radioFall.Checked ? "Fall" : "Spring";
+            season.Year = (int)yearSelector.Value;
+            season.Semester = radioFall.Checked ? "Fall" : "Spring";
 
-            if (MainScreen.SeasonExists(new Season(semester, year)))
+            if (MainScreen.SeasonExists(season))
             {
                 MessageBox.Show("This season already exists!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return DialogResult.Cancel;

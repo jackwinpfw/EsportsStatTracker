@@ -14,21 +14,25 @@ namespace EsportsStatTracker.Database_Models
         [BsonElement("game")]
         public string Game { get; set; } = string.Empty;
 
+        public Team() { }
+
         public Team(string Name, string Game)
         {
             this.Name = Name;
             this.Game = Game;
         }
 
-        public void UpdateInfo(string Name, string Game)
+        public void UpdateInfo(Team team)
         {
-            this.Name = Name;
-            this.Game = Game;
+            Name = team.Name;
+            Game = team.Game;
 
             IMongoDatabase database = MainScreen.GetDatabase();
             database.GetCollection<Team>("teams").UpdateOne(
                 Builders<Team>.Filter.Eq(t => t.Id, Id),
-                Builders<Team>.Update.Set(t => t.Name, Name).Set(t => t.Game, Game)
+                Builders<Team>.Update
+                    .Set(t => t.Name, Name)
+                    .Set(t => t.Game, Game)
             );
         }
     }
