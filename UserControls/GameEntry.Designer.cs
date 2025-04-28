@@ -53,6 +53,7 @@
             this.DeleteButton.Size = new System.Drawing.Size(60, 60);
             this.DeleteButton.TabIndex = 6;
             this.DeleteButton.UseVisualStyleBackColor = true;
+            this.DeleteButton.Click += new System.EventHandler(this.DeleteMatch);
             // 
             // EditMatchButton
             // 
@@ -75,7 +76,7 @@
             this.Controls.Add(this.EditMatchButton);
             this.Controls.Add(this.Title);
             this.Name = "GameEntry";
-            this.Size = new System.Drawing.Size(800, 65);
+            this.Size = new System.Drawing.Size(769, 65);
             this.ResumeLayout(false);
 
         }

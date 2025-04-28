@@ -1,5 +1,7 @@
 ﻿using EsportsStatTracker.Database_Models;
 using EsportsStatTracker.Forms;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Windows.Forms;
 
@@ -16,6 +18,16 @@ namespace EsportsStatTracker.UserControls
             Data = data;
             Team = team;
             Title.Text = GetTitle();
+        }
+
+        public DateTime GetDate()
+        {
+            return Data.DatePlayed;
+        }
+
+        public string GetOppName()
+        {
+            return Data.OppName;
         }
 
         public string GetTitle()
@@ -50,6 +62,22 @@ namespace EsportsStatTracker.UserControls
 
                 Data.UpdateInfo(m);
                 Title.Text = GetTitle();
+            }
+        }
+
+        private void DeleteMatch(object sender, EventArgs e)
+        {
+            DeletePrompt dp = new DeletePrompt();
+            if (dp.ShowPrompt() == DialogResult.OK)
+            {
+                ObjectId id = Data.Id;
+
+                IMongoDatabase database = MainScreen.GetDatabase();
+
+                database.GetCollection<Match>("matches").DeleteOne(Builders<Match>.Filter.Eq(m => m.Id, id));
+                database.GetCollection<PlaysIn>("plays_in").DeleteOne(Builders<PlaysIn>.Filter.Eq(m => m.MatchId, id));
+
+                Team.DeleteMatch(this);
             }
         }
     }

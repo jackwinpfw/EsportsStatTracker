@@ -11,8 +11,8 @@ namespace EsportsStatTracker.Forms
 {
     public partial class TeamGames : Form
     {
-        private TeamEntry ParentEntry {  get; set; }
-        private List<Match> Matches = new List<Match>();
+        private TeamEntry ParentEntry { get; set; }
+        private List<GameEntry> Matches = new List<GameEntry>();
 
         public TeamGames(TeamEntry parent)
         {
@@ -30,23 +30,23 @@ namespace EsportsStatTracker.Forms
 
             foreach (PlaysIn play in playsIn)
             {
-                Matches.Add(database.GetCollection<Match>("matches").Find(Builders<Match>.Filter.Eq(m => m.Id, play.MatchId)).First());
+                Match match = database.GetCollection<Match>("matches").Find(Builders<Match>.Filter.Eq(m => m.Id, play.MatchId)).First();
+                Matches.Add(new GameEntry(match, this));
             }
 
-            Matches = Matches.OrderByDescending(match => match.DatePlayed).ToList();
+            Matches = Matches.OrderByDescending(match => match.GetDate()).ToList();
 
-            foreach (Match match in Matches)
+            foreach (GameEntry match in Matches)
             {
-                GameEntry gameEntry = new GameEntry(match, this);
-                FlowPanel.Controls.Add(gameEntry);
+                FlowPanel.Controls.Add(match);
             }
         }
 
         public bool MatchExists(Match ma)
         {
-            foreach (Match match in Matches)
+            foreach (GameEntry match in Matches)
             {
-                if (match.DatePlayed == ma.DatePlayed && match.OppName == ma.OppName)
+                if (match.GetDate() == ma.DatePlayed && match.GetOppName() == ma.OppName)
                 {
                     return true;
                 }
@@ -57,13 +57,14 @@ namespace EsportsStatTracker.Forms
 
         private void AddMatch(Match match)
         {
-            Matches.Add(match);
-            Matches = Matches.OrderByDescending(m => m.DatePlayed).ToList();
+            GameEntry entry = new GameEntry(match, this);
+            Matches.Add(entry);
+            Matches = Matches.OrderByDescending(m => m.GetDate()).ToList();
 
             FlowPanel.Controls.Clear();
-            foreach (var m in Matches)
+            foreach (GameEntry m in Matches)
             {
-                FlowPanel.Controls.Add(new GameEntry(m, this));
+                FlowPanel.Controls.Add(m);
             }
         }
 
@@ -89,6 +90,17 @@ namespace EsportsStatTracker.Forms
 
                 PlaysIn playsIn = new PlaysIn(ParentEntry.GetObjectId(), m.Id);
                 MainScreen.InsertData("plays_in", playsIn);
+            }
+        }
+
+        public void DeleteMatch(GameEntry game)
+        {
+            Matches.Remove(game);
+            Matches = Matches.OrderByDescending(m => m.GetDate()).ToList();
+            FlowPanel.Controls.Clear();
+            foreach (GameEntry m in Matches)
+            {
+                FlowPanel.Controls.Add(m);
             }
         }
     }

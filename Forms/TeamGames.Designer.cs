@@ -43,7 +43,7 @@
             this.Title.Font = new System.Drawing.Font("Oswald Medium", 30F);
             this.Title.Location = new System.Drawing.Point(3, -3);
             this.Title.Name = "Title";
-            this.Title.Size = new System.Drawing.Size(204, 68);
+            this.Title.Size = new System.Drawing.Size(200, 68);
             this.Title.TabIndex = 0;
             this.Title.Text = "Team name";
             // 
@@ -89,6 +89,7 @@
             // 
             // FlowPanel
             // 
+            this.FlowPanel.AutoScroll = true;
             this.FlowPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FlowPanel.Location = new System.Drawing.Point(3, 73);
             this.FlowPanel.Name = "FlowPanel";
